@@ -14,7 +14,7 @@
  *          pertaining to distribution of the Program without specific, written prior permission. 
  */
 
-package Flock;
+package com.boids.lalena;
 
 import java.util.Vector;
 import java.awt.*;
