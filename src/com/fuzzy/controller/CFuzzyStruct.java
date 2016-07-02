@@ -17,7 +17,7 @@ public class CFuzzyStruct {
 		_flightSpeed = velocityIn;
 	}
 	
-	public double GetFlightSpeed()
+	public Variable GetFlightSpeed()
 	{
 		return _flightSpeed;
 	}
@@ -27,7 +27,7 @@ public class CFuzzyStruct {
 		_flightDirection = directionIn;
 	}
 	
-	public double GetFlightDirection()
+	public Variable GetFlightDirection()
 	{
 		return _flightDirection;
 	}
