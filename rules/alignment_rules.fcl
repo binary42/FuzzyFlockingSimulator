@@ -1,0 +1,73 @@
+FUNCTION_BLOCK alignment
+
+VAR_INPUT
+	distance 	: 	REAL;
+	direction	:	REAL;
+	speed		:	REAL;
+END_VAR
+
+VAR_OUTPUT
+	flight_direction	:	REAL;
+	flight_speed		:	REAL;
+END_VAR
+
+FUZZIFY distance		// Percent distance % visual range
+	TERM too_close	:=	( 0, 1 ) ( 80, 0 );
+	TERM good		:=	trian 0 60 120;
+	TERM too_far	:=	( 0, 0 ) ( 40, 0 )( 100, 1 );
+END_FUZZIFY
+
+FUZZIFY direction		// Distance difference in degrees from neighbor
+	TERM left				:=	( -180, 1 ) ( 0, 0 ); 
+	TERM same_direction		:=	trian -180 0 180;
+	TERM right				:=	( -180, 0 ) ( 0, 0 ) ( 180, 1);
+END_FUZZIFY
+
+FUZZIFY speed			// difference in speed % max
+	TERM slower				:=	( -100, 1 ) ( 0, 0 ) ( 100, 0 );
+	TERM same_speed			:=	trian -100 0 100;
+	TERM faster				:=	( -100, 0 ) ( 0, 0 ) ( 100, 1 );
+END_FUZZIFY
+
+DEFUZZIFY flight_direction		// Change of direction in degree
+	TERM turn_left			:=	trian -360 -180 0; 
+	TERM keep_direction		:=	trian -180 0 180;
+	TERM turn_right			:=	trian 0 180 360;
+	
+	METHOD	: COG;
+	DEFAULT	:= 0;
+END_DEFUZZIFY
+
+DEFUZZIFY flight_speed			// Change of speed % max
+	TERM decelerate			:=	trian -200 -100 0;
+	TERM keep_speed			:=	trian -100 0 100;
+	TERM accelerate			:=	trian 0 100 200;
+	
+	METHOD	: COG;
+	DEFAULT	:= 0;
+END_DEFUZZIFY
+
+RULEBLOCK alignment_rules
+
+	AND	: MIN;			// Use min for and
+ 	ACT	: MIN;			// Use min activation method
+	ACCU : MAX;			// Use max accumulation method
+	
+	RULE 1 : IF distance IS too_far THEN flight_direction IS keep_direction;
+	RULE 2 : IF distance IS too_close THEN flight_direction IS keep_direction;
+	RULE 3 : IF distance IS too_far THEN flight_speed IS keep_speed;
+	RULE 4 : IF distance IS too_close THEN flight_speed IS keep_speed;
+	RULE 5 : IF distance IS good AND direction IS same_direction THEN flight_direction IS keep_direction;
+	RULE 6 : IF distance IS good AND direction IS left THEN flight_direction IS turn_left;
+	RULE 7 : IF distance IS good AND direction IS right THEN flight_direction IS turn_right;
+	RULE 8 : IF distance IS good AND speed IS same_speed THEN flight_speed IS keep_speed;
+	RULE 9 : IF distance IS good AND speed IS slower THEN flight_speed IS decelerate;
+	RULE 10 : IF distance IS good AND speed IS faster THEN flight_speed IS accelerate;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
+/*from ilb_phd05a.pdf
+ * 	applying fuzzy logic on it, the fuzzy animat can work out
+	the uncertain action that should be taken in order to keep approximately the same flight
+	speed and flight direction as the perceived neighbors. 
+ */
