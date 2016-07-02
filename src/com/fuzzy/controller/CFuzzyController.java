@@ -69,7 +69,10 @@ public class CFuzzyController {
 	
 	public void Evaluate()
 	{
-		// TODO - multiple fcls?
+		for( FIS file : _files )
+		{
+			file.evaluate();
+		}
 	}
 	
 	public void GetVariableResult( String varIn, boolean displayChart )
