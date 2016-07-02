@@ -5,6 +5,7 @@ import java.util.Vector;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
+import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 public class CFuzzyController {
 	
@@ -85,11 +86,30 @@ public class CFuzzyController {
 		}
 	}
 	
-	public void GetVariableResult( String varIn, boolean displayChart )
+	/**
+	 * Not sure about this one. May be best to return full vector of values.
+	 * Unit testing only. GetNewPositionAndVelocity returns new fuzzy struct decision.
+	 * @param varIn
+	 * @param displayChart
+	 * @return
+	 */
+	public Variable GetVariableResult( String varIn, boolean displayChart )
 	{
 		// TODO - multiple fcls?
 		
 		// Must reset the _fuzzyOutput vector for now
 		_fuzzyOutputs.clear();
+		
+		return null;
+	}
+	
+	public CFuzzyStruct GetNewPositionAndVelocity()
+	{
+		// TODO - Compute uncertain actions for each rule
+		
+		// TODO - Compute fuzzy weighted sum - Velocity
+		
+		// TODO - Compute Position
+		return null;
 	}
 }
