@@ -14,6 +14,8 @@ public class CFuzzyController {
 	private Vector<FIS> _files;
 	private Vector<FunctionBlock> _blocks;
 	
+	private Vector<CFuzzyStruct> _fuzzyOutputs;
+	
 	CFuzzyController( int numFCLIn )
 	{
 		_numberFCL = numFCLIn;
@@ -30,7 +32,10 @@ public class CFuzzyController {
 	{
 		return _numberFCL;
 	}
-	
+	/**
+	 * Order really matters in this impl!
+	 * @param fileNamesIn
+	 */
 	public void LoadFCL( Vector<String> fileNamesIn )
 	{
 		// Load fcl files
@@ -64,7 +69,10 @@ public class CFuzzyController {
 	
 	public void SetVariable( String varIn, double valIn )
 	{
-		// TODO - multiple fcls?
+		for( FIS file : _files )
+		{
+			file.setVariable( varIn,  valIn );
+		}
 	}
 	
 	public void Evaluate()
@@ -72,11 +80,16 @@ public class CFuzzyController {
 		for( FIS file : _files )
 		{
 			file.evaluate();
+			// Order is going to matter due to different weights for the fuzzy fusion decision
+			_fuzzyOutputs.add( new CFuzzyStruct( file.getVariable( "flight_speed" ), file.getVariable( "flight_direction" ) ) );
 		}
 	}
 	
 	public void GetVariableResult( String varIn, boolean displayChart )
 	{
 		// TODO - multiple fcls?
+		
+		// Must reset the _fuzzyOutput vector for now
+		_fuzzyOutputs.clear();
 	}
 }
