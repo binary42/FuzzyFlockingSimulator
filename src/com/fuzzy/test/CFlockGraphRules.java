@@ -8,9 +8,9 @@ public class CFlockGraphRules {
 	public static void main( String args[] )
 	{
 		// Fuzzy rule files
-		String attractionRules = "attraction_rules.fcl";
-		String alignmentRules = "alignment_rules.fcl";
-		String repulsionRules = "repulsion_rules.fcl";
+		String attractionRules = "rules/attraction_rules.fcl";
+		String alignmentRules = "rules/alignment_rules.fcl";
+		String repulsionRules = "rules/repulsion_rules.fcl";
 		
 		// Load rules
 		FIS attraction = FIS.load( attractionRules, true );
