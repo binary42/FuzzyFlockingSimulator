@@ -1,5 +1,6 @@
 package com.fuzzy.controller;
 
+import java.util.Map;
 import java.util.Vector;
 
 import net.sourceforge.jFuzzyLogic.FIS;
@@ -95,8 +96,10 @@ public class CFuzzyController {
 	 */
 	public Variable GetVariableResult( String varIn, boolean displayChart )
 	{
-		// TODO - multiple fcls?
-		
+		for( FunctionBlock block : _blocks )
+		{
+			
+		}
 		// Must reset the _fuzzyOutput vector for now
 		_fuzzyOutputs.clear();
 		
