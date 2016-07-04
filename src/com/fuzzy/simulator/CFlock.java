@@ -13,32 +13,32 @@ public class CFlock {
 	public static int SeparationRange;
 	public static int DetectionRange;
 
-	public static void setMapSize(Dimension size) {
+	public static void SetMapSize(Dimension size) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public static void addAnimat(CAnimat animat) {
+	public static void AddAnimat(CAnimat animat) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public static void removeCAnimat(Color green) {
+	public static void RemoveCAnimat(Color green) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public static void setCAnimatParameters(Color green, int greenAnimatSpeed, int greenAnimatMaxTheta) {
+	public static void SetCAnimatParameters(Color green, int greenAnimatSpeed, int greenAnimatMaxTheta) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public static Vector move() {
+	public static Vector Move() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void draw(Graphics canvasGraphics) {
+	public void Draw(Graphics canvasGraphics) {
 		// TODO Auto-generated method stub
 		
 	}
