@@ -26,6 +26,7 @@ public class CAnimat {
 
 	public CAnimat( Color colorIn ) {
 		this((int)( Math.random() * s_map.width ), (int)( Math.random() * s_map.height ), (int)( Math.random() * 360 ), colorIn );
+		s_map = new Dimension( 500, 500 );
 	}
 	
 	public CAnimat( int xIn, int yIn, int thetaIn, Color colorIn ){
@@ -34,10 +35,12 @@ public class CAnimat {
 		
 		_currentTheta = thetaIn;
 		_color = colorIn;
+		
+		s_map = new Dimension( 500, 500 );
 	}
 
 	public CAnimat() {
-		// TODO Auto-generated constructor stub
+		s_map = new Dimension( 500, 500 );
 	}
 
 	public static void SetMapSize( Dimension sizeIn ) {
@@ -57,7 +60,7 @@ public class CAnimat {
 		return _color;
 	}
 	
-	public void draw( Graphics g) {
+	public void Draw( Graphics g) {
         g.setColor( this._color);
         g.fillArc( location.x - 12, location.y - 12, 24, 24, _currentTheta + 180 - 20, 40 );
         
