@@ -272,7 +272,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.setMaxTurnTheta( greenAnimatMaxTheta );
                     
-                    CFlock.addCAnimat( animat );
+                    CFlock.addAnimat( animat );
                 }
             }
             numberOfGreenAnimats = greenMunberAnimatsScrollbar.getValue();
@@ -290,7 +290,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.setMaxTurnTheta( blueAnimatMaxTheta );
                     
-                    CFlock.addCAnimat( animat );
+                    CFlock.addAnimat( animat );
                 }
             }
             numberOfBlueAnimats = blueNumberAnimatsScrollbar.getValue();
@@ -308,7 +308,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.setMaxTurnTheta( redAnimatMaxTheta );
                     
-                    CFlock.addCAnimat( animat );
+                    CFlock.addAnimat( animat );
                 }
             }
             numberOfRedAnimats = redNumberAnimatsScrollbar.getValue();
@@ -495,7 +495,7 @@ public class CSimulator extends Applet implements Runnable {
                 canvasGraphics.setColor( Color.white );
                 
                 canvasGraphics.fillRect( 0, 0, canvas.getWidth(), canvas.getHeight() );
-                simulator.CFlock.draw( canvasGraphics );
+                simulator.flock.draw( canvasGraphics );
                 
                 canvas.getGraphics().drawImage(canvasImage, 0, 0, this);
             }
