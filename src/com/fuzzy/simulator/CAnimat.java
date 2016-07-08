@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import com.boids.lalena.Bird;
+
 public class CAnimat {
 
 	public static int DetectionRange;
@@ -68,7 +70,7 @@ public class CAnimat {
             DrawRanges( g );
         }
     }
-	
+	// Lalena
 	public void DrawRanges( Graphics g ) {
         DrawCircles(g, location.x, location.y );
         
@@ -111,7 +113,7 @@ public class CAnimat {
         g.setColor( _color);
         g.drawOval( x-SeparationRange, y-SeparationRange, 2*SeparationRange, 2*SeparationRange );
     }
-	
+	// Lalena
 	public void Move( int newHeadingIn ) {
         // determine if it is better to turn left or right for the new heading
         int left = ( newHeadingIn - _currentTheta + 360 ) % 360;
@@ -139,5 +141,23 @@ public class CAnimat {
         
         location.y -= (int)( _currentSpeed * Math.sin( _currentTheta * Math.PI/180) ) - s_map.height;
         location.y %= s_map.height;
+    }
+
+	public Point GetLocation() {
+		return location;
+	}
+	// Lalena
+	public int GetDistance( CAnimat otherAnimatIn ) {
+        int dX = otherAnimatIn.GetLocation().x - location.x;
+        int dY = otherAnimatIn.GetLocation().y - location.y;
+        
+        return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
+	}
+	
+	 public int GetDistance( Point pointIn ) {
+        int dX = pointIn.x - location.x;
+        int dY = pointIn.y - location.y;
+        
+        return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
     }
 }
