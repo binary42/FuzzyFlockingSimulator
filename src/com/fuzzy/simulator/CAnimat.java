@@ -9,8 +9,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import com.boids.lalena.Bird;
-
 public class CAnimat {
 
 	public static int DetectionRange;
