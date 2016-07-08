@@ -12,6 +12,7 @@ import java.awt.*;
 import java.applet.*;
 import java.util.Vector;
 
+//Lalena
 public class CSimulator extends Applet implements Runnable {
 	
 	/**
@@ -171,7 +172,7 @@ public class CSimulator extends Applet implements Runnable {
             
             animat.SetMaxTurnTheta( greenAnimatMaxTheta );
             
-            CFlock.AddAnimat( animat );
+            flock.AddAnimat( animat );
         }
         for( int i=0; i < numberOfBlueAnimats; ++i ) {
         	CAnimat animat = new CAnimat( Color.blue );
@@ -179,7 +180,7 @@ public class CSimulator extends Applet implements Runnable {
         	
         	animat.SetMaxTurnTheta( blueAnimatMaxTheta );
             
-        	CFlock.AddAnimat( animat );
+        	flock.AddAnimat( animat );
         }
         for( int i=0; i < numberOfRedAnimats; ++i ) {
             CAnimat CAnimat = new CAnimat();
@@ -187,7 +188,7 @@ public class CSimulator extends Applet implements Runnable {
             
             CAnimat.SetMaxTurnTheta( redAnimatMaxTheta );
             
-            CFlock.AddAnimat( CAnimat );
+            flock.AddAnimat( CAnimat );
         }
     }
 
@@ -224,7 +225,7 @@ public class CSimulator extends Applet implements Runnable {
             
             CFlock.SetMapSize(canvas.getSize());
             
-            Vector removedCAnimats = CFlock.Move();
+            Vector<CAnimat> removedCAnimats = flock.Move();
             
             for ( int i = 0; i < removedCAnimats.size(); ++i ) {
                 CAnimat CAnimat = (CAnimat)removedCAnimats.elementAt(i);
@@ -263,11 +264,11 @@ public class CSimulator extends Applet implements Runnable {
      *
      * @param  ev The event parameters
      */
-    public boolean handleEvent(Event ev) { // check for control panel actions
+    public boolean handleEvent( Event ev ) { // check for control panel actions
         if ( ev.target == greenMunberAnimatsScrollbar ) {
             if ( greenMunberAnimatsScrollbar.getValue() < numberOfGreenAnimats ) {
                 for ( int i = 0; i < numberOfGreenAnimats - greenMunberAnimatsScrollbar.getValue(); ++i ) {
-                    CFlock.RemoveCAnimat( Color.green );
+                	flock.RemoveCAnimat( Color.green );
                 }
             }
             else {
@@ -277,7 +278,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.SetMaxTurnTheta( greenAnimatMaxTheta );
                     
-                    CFlock.AddAnimat( animat );
+                    flock.AddAnimat( animat );
                 }
             }
             numberOfGreenAnimats = greenMunberAnimatsScrollbar.getValue();
@@ -285,7 +286,7 @@ public class CSimulator extends Applet implements Runnable {
         else if ( ev.target == blueNumberAnimatsScrollbar ) {
             if ( blueNumberAnimatsScrollbar.getValue() < numberOfBlueAnimats ) {
                 for ( int i = 0; i < numberOfBlueAnimats - blueNumberAnimatsScrollbar.getValue(); ++i ) {
-                    CFlock.RemoveCAnimat( Color.blue );
+                	flock.RemoveCAnimat( Color.blue );
                 }
             }
             else {
@@ -295,7 +296,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.SetMaxTurnTheta( blueAnimatMaxTheta );
                     
-                    CFlock.AddAnimat( animat );
+                    flock.AddAnimat( animat );
                 }
             }
             numberOfBlueAnimats = blueNumberAnimatsScrollbar.getValue();
@@ -303,7 +304,7 @@ public class CSimulator extends Applet implements Runnable {
         else if ( ev.target == redNumberAnimatsScrollbar ) {
             if ( redNumberAnimatsScrollbar.getValue() < numberOfRedAnimats ) {
                 for ( int i = 0; i < numberOfRedAnimats - redNumberAnimatsScrollbar.getValue(); ++i ) {
-                    CFlock.RemoveCAnimat( Color.red );
+                	flock.RemoveCAnimat( Color.red );
                 }
             }
             else {
@@ -313,7 +314,7 @@ public class CSimulator extends Applet implements Runnable {
                     
                     animat.SetMaxTurnTheta( redAnimatMaxTheta );
                     
-                    CFlock.AddAnimat( animat );
+                    flock.AddAnimat( animat );
                 }
             }
             numberOfRedAnimats = redNumberAnimatsScrollbar.getValue();
@@ -322,7 +323,7 @@ public class CSimulator extends Applet implements Runnable {
             greenAnimatSpeed = greenSpeedScrollbar.getValue();
             greenAnimatMaxTheta = greenMaxThetaScrollbar.getValue();
            
-            CFlock.SetCAnimatParameters( Color.green, greenAnimatSpeed, greenAnimatMaxTheta );
+            flock.SetCAnimatParameters( Color.green, greenAnimatSpeed, greenAnimatMaxTheta );
             
             return true;
         }
@@ -330,13 +331,13 @@ public class CSimulator extends Applet implements Runnable {
             blueAnimatSpeed = blueSpeedScrollbar.getValue();
             blueAnimatMaxTheta = blueMaxThetaScrollbar.getValue();
             
-            CFlock.SetCAnimatParameters(Color.blue, blueAnimatSpeed, blueAnimatMaxTheta );
+            flock.SetCAnimatParameters(Color.blue, blueAnimatSpeed, blueAnimatMaxTheta );
         }
         else if ( ( ev.target == redSpeedScrollbar ) || (ev.target == redMaxThetaScrollbar ) ) {
             redAnimatSpeed = redSpeedScrollbar.getValue();
             redAnimatMaxTheta = redMaxThetaScrollbar.getValue();
             
-            CFlock.SetCAnimatParameters( Color.red, redAnimatSpeed, redAnimatMaxTheta );
+            flock.SetCAnimatParameters( Color.red, redAnimatSpeed, redAnimatMaxTheta );
         }
         else if ( ev.target == detectScrollbar ) {
             detectDistance = detectScrollbar.getValue();

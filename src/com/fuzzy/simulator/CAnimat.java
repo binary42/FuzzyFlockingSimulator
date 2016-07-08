@@ -8,6 +8,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Vector;
+
+import com.fuzzy.controller.CFuzzyController;
+import com.fuzzy.controller.CFuzzyStruct;
 
 public class CAnimat {
 
@@ -23,10 +27,17 @@ public class CAnimat {
 	
 	private double _currentSpeed;
 	private int _maxTurnTheta;
+	
+    // Each Animat gets a fuzzy controller
+    private CFuzzyController _animatController;
 
 	public CAnimat( Color colorIn ) {
 		this((int)( Math.random() * s_map.width ), (int)( Math.random() * s_map.height ), (int)( Math.random() * 360 ), colorIn );
 		s_map = new Dimension( 500, 500 );
+		
+		// Hard code # of rule sets for now...
+		_animatController = new CFuzzyController( 3 );
+		InitController();
 	}
 	
 	public CAnimat( int xIn, int yIn, int thetaIn, Color colorIn ){
@@ -37,12 +48,30 @@ public class CAnimat {
 		_color = colorIn;
 		
 		s_map = new Dimension( 500, 500 );
+		
+		// Hard code # of rule sets for now...
+		_animatController = new CFuzzyController( 3 );
+		InitController();
 	}
 
 	public CAnimat() {
 		s_map = new Dimension( 500, 500 );
+		
+		// Hard code # of rule sets for now...
+		_animatController = new CFuzzyController( 3 );
+		InitController();
 	}
 
+	private void InitController()
+	{
+		Vector<String> files = new Vector<String>( 3 );
+		files.add( "rules/alignment_rules.fcl" );
+		files.add( "rules/attraction_rules.fcl" );
+		files.add( "repulsion_rules.fcl" );
+		
+		_animatController.LoadFCL( files );
+	}
+	
 	public static void SetMapSize( Dimension sizeIn ) {
 		s_map = sizeIn;
 	}
@@ -152,10 +181,15 @@ public class CAnimat {
         return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
 	}
 	
-	 public int GetDistance( Point pointIn ) {
+	public int GetDistance( Point pointIn ) {
         int dX = pointIn.x - location.x;
         int dY = pointIn.y - location.y;
         
         return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
     }
+	 
+	public CFuzzyStruct GetFuzzyVelocityAndHeading()
+	{
+		
+	}
 }

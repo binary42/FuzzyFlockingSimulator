@@ -18,7 +18,7 @@ public class CFuzzyController {
 	
 	private Vector<CFuzzyStruct> _fuzzyOutputs;
 	
-	CFuzzyController( int numFCLIn )
+	public CFuzzyController( int numFCLIn )
 	{
 		_numberFCL = numFCLIn;
 		_fclFileNames = new Vector<String>( _numberFCL )	;

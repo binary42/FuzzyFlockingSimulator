@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Vector;
 
+import com.fuzzy.controller.CFuzzyController;
+
 public class CFlock {
 
 	public static int SeparationRange;
@@ -24,7 +26,7 @@ public class CFlock {
     	_animats = new Vector<CAnimat>( 40, 10 );
     }
 	
-	public void SetMapSize( Dimension sizeIn ) {
+	public static void SetMapSize( Dimension sizeIn ) {
 		s_map = sizeIn;
 	}
 
@@ -60,7 +62,7 @@ public class CFlock {
 			animat.Draw( canvasGraphicsIn );
 		}
 	}
-	// Lalena
+	// departure from Lalena - fuzzy bits
 	synchronized public Vector<CAnimat> Move()
 	{
 		int movingAnimat = 0;
@@ -69,7 +71,11 @@ public class CFlock {
 		while( movingAnimat < _animats.size() )
 		{
 			CAnimat animat = (CAnimat)_animats.elementAt( movingAnimat );
-			animat.Move( GeneralHeading( animat ) );	
+			
+			//animat.Move( GeneralHeading( animat ) );
+			
+			// Get fuzzy velocity and heading
+			
 		}
 		
 		return movedAnimats;
