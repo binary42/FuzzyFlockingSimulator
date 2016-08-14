@@ -115,7 +115,7 @@ public class CSimulator extends Applet implements Runnable {
      * This creates the canvas, the sliders, and the CFlock of CAnimats.
      */
     public void init() {
-        this.resize(500, 500);
+        this.resize( CFlock.DIM, CFlock.DIM );
         canvas = new SimulatorCanvas();
         canvas.simulator = this;
         

@@ -16,13 +16,15 @@ public class CFlock {
 	public static int SeparationRange;
 	public static int DetectionRange;
 	
+	public static final int DIM = 1000;
+	
 	private Vector<CAnimat> _animats;
 
     private static Dimension s_map;
     
     CFlock()
     {
-    	s_map = new Dimension( 500, 500 );
+    	s_map = new Dimension( DIM, DIM );
     	_animats = new Vector<CAnimat>( 40, 10 );
     }
 	

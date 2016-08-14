@@ -54,6 +54,7 @@ public class CFuzzyController {
 			System.err.println( "Error loading .fcl files." );
 			System.exit( -1 );
 		}
+		
 		// Load function blocks from the fcls
 		for( FIS file : _files )
 		{

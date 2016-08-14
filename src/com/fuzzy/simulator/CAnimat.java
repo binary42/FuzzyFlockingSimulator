@@ -23,7 +23,7 @@ public class CAnimat {
 	private int _currentTheta;
 	protected Color _color;
 	
-	protected static Dimension s_map = new Dimension( 500, 500 );
+	protected static Dimension s_map = new Dimension( CFlock.DIM, CFlock.DIM );
 	
 	private double _currentSpeed;
 	private int _maxTurnTheta;
