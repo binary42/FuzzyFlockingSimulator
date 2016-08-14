@@ -19,11 +19,11 @@ public class CAnimat {
 	public static int SeparationRange;
 	public static boolean showRanges;
 	
-	protected Point location;
+	protected Point location = new Point( 0, 0 );
 	private int _currentTheta;
 	protected Color _color;
 	
-	protected static Dimension s_map;
+	protected static Dimension s_map = new Dimension( 500, 500 );
 	
 	private double _currentSpeed;
 	private int _maxTurnTheta;
@@ -33,11 +33,6 @@ public class CAnimat {
 
 	public CAnimat( Color colorIn ) {
 		this((int)( Math.random() * s_map.width ), (int)( Math.random() * s_map.height ), (int)( Math.random() * 360 ), colorIn );
-		s_map = new Dimension( 500, 500 );
-		
-		// Hard code # of rule sets for now...
-		_animatController = new CFuzzyController( 3 );
-		InitController();
 	}
 	
 	public CAnimat( int xIn, int yIn, int thetaIn, Color colorIn ){
@@ -47,16 +42,12 @@ public class CAnimat {
 		_currentTheta = thetaIn;
 		_color = colorIn;
 		
-		s_map = new Dimension( 500, 500 );
-		
 		// Hard code # of rule sets for now...
 		_animatController = new CFuzzyController( 3 );
 		InitController();
 	}
 
 	public CAnimat() {
-		s_map = new Dimension( 500, 500 );
-		
 		// Hard code # of rule sets for now...
 		_animatController = new CFuzzyController( 3 );
 		InitController();
@@ -65,9 +56,9 @@ public class CAnimat {
 	private void InitController()
 	{
 		Vector<String> files = new Vector<String>( 3 );
-		files.add( "rules/alignment_rules.fcl" );
-		files.add( "rules/attraction_rules.fcl" );
-		files.add( "repulsion_rules.fcl" );
+		files.add( "../rules/alignment_rules.fcl" );
+		files.add( "../rules/attraction_rules.fcl" );
+		files.add( "../rules/repulsion_rules.fcl" );
 		
 		_animatController.LoadFCL( files );
 	}
@@ -190,6 +181,7 @@ public class CAnimat {
 	 
 	public CFuzzyStruct GetFuzzyVelocityAndHeading()
 	{
+		return null;
 		
 	}
 }

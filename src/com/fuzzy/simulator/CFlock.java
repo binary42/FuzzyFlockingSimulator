@@ -116,6 +116,7 @@ public class CFlock {
 			
 			
 		}
+		return numAnimats;
 	}
 	// Lalena
 	private Point ClosetLocation( Point point1In, Point point2In ) {

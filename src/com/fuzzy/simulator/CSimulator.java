@@ -457,7 +457,7 @@ public class CSimulator extends Applet implements Runnable {
     }
     
     public String getAppletInfo() {
-	return "CFlocking Simulator by Michael LaLena";
+	return "CFlocking Simulator by Michael LaLena, modified by J. Neilan for simulating fuzzy control flocking.";
     }
     
     class SimulatorCanvas extends Canvas {

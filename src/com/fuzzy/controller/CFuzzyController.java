@@ -21,7 +21,10 @@ public class CFuzzyController {
 	public CFuzzyController( int numFCLIn )
 	{
 		_numberFCL = numFCLIn;
-		_fclFileNames = new Vector<String>( _numberFCL )	;
+		_fclFileNames = new Vector<String>( _numberFCL );
+		
+		_files = new Vector<FIS>( _numberFCL );
+		_blocks = new Vector<FunctionBlock>(0);
 	}
 	
 	public void SetNumberFCL( int numFCLIn )
@@ -42,10 +45,15 @@ public class CFuzzyController {
 	{
 		// Load fcl files
 		for( String file : fileNamesIn )
-		{
+		{	
 			_files.add( FIS.load( file ) );
 		}
-		
+	
+		if( _files.isEmpty() )
+		{
+			System.err.println( "Error loading .fcl files." );
+			System.exit( -1 );
+		}
 		// Load function blocks from the fcls
 		for( FIS file : _files )
 		{
