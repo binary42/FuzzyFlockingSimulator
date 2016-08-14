@@ -72,7 +72,7 @@ public class CSimulator extends Applet implements Runnable {
     int detectDistance;
     
     // These are the scrollbar sliders themselves
-    Scrollbar greenMunberAnimatsScrollbar = new Scrollbar( Scrollbar.HORIZONTAL );
+    Scrollbar greenNumberAnimatsScrollbar = new Scrollbar( Scrollbar.HORIZONTAL );
     Scrollbar blueNumberAnimatsScrollbar = new Scrollbar( Scrollbar.HORIZONTAL );
     Scrollbar redNumberAnimatsScrollbar = new Scrollbar( Scrollbar.HORIZONTAL );
     
@@ -238,8 +238,8 @@ public class CSimulator extends Applet implements Runnable {
                     blueNumberAnimatsScrollbar.setValue( numberOfBlueAnimats );
                 }
                 else if ( CAnimat.GetColor().equals( Color.green )) {
-                    numberOfGreenAnimats = greenMunberAnimatsScrollbar.getValue() - 1;
-                    greenMunberAnimatsScrollbar.setValue( numberOfGreenAnimats );
+                    numberOfGreenAnimats = greenNumberAnimatsScrollbar.getValue() - 1;
+                    greenNumberAnimatsScrollbar.setValue( numberOfGreenAnimats );
                 }
             }
             
@@ -265,14 +265,14 @@ public class CSimulator extends Applet implements Runnable {
      * @param  ev The event parameters
      */
     public boolean handleEvent( Event ev ) { // check for control panel actions
-        if ( ev.target == greenMunberAnimatsScrollbar ) {
-            if ( greenMunberAnimatsScrollbar.getValue() < numberOfGreenAnimats ) {
-                for ( int i = 0; i < numberOfGreenAnimats - greenMunberAnimatsScrollbar.getValue(); ++i ) {
+        if ( ev.target == greenNumberAnimatsScrollbar ) {
+            if ( greenNumberAnimatsScrollbar.getValue() < numberOfGreenAnimats ) {
+                for ( int i = 0; i < numberOfGreenAnimats - greenNumberAnimatsScrollbar.getValue(); ++i ) {
                 	flock.RemoveCAnimat( Color.green );
                 }
             }
             else {
-                for ( int i = 0; i < greenMunberAnimatsScrollbar.getValue() - numberOfGreenAnimats; ++i ) {
+                for ( int i = 0; i < greenNumberAnimatsScrollbar.getValue() - numberOfGreenAnimats; ++i ) {
                     CAnimat animat = new CAnimat( Color.green );
                     animat.SetSpeed( greenAnimatSpeed );
                     
@@ -281,7 +281,7 @@ public class CSimulator extends Applet implements Runnable {
                     flock.AddAnimat( animat );
                 }
             }
-            numberOfGreenAnimats = greenMunberAnimatsScrollbar.getValue();
+            numberOfGreenAnimats = greenNumberAnimatsScrollbar.getValue();
         }
         else if ( ev.target == blueNumberAnimatsScrollbar ) {
             if ( blueNumberAnimatsScrollbar.getValue() < numberOfBlueAnimats ) {
@@ -411,7 +411,7 @@ public class CSimulator extends Applet implements Runnable {
         controls.add( redLabel );
         
         controls.add( numberCAnimatsLabel );
-        controls.add( greenMunberAnimatsScrollbar );
+        controls.add( greenNumberAnimatsScrollbar );
         controls.add( blueNumberAnimatsScrollbar );
         controls.add( redNumberAnimatsScrollbar );
         controls.add( speedLabel );
@@ -439,7 +439,7 @@ public class CSimulator extends Applet implements Runnable {
      * Sets the values of the slider controls on the panel.
      */
     public void setControlValues() {
-        greenMunberAnimatsScrollbar.setValues( numberOfGreenAnimats, 1, 0, MAXIMUM_ANIMATS );
+        greenNumberAnimatsScrollbar.setValues( numberOfGreenAnimats, 1, 0, MAXIMUM_ANIMATS );
         blueNumberAnimatsScrollbar.setValues( numberOfBlueAnimats, 1, 0, MAXIMUM_ANIMATS );
         
         redNumberAnimatsScrollbar.setValues( numberOfRedAnimats, 1, 0, MAXIMUM_ANIMATS );

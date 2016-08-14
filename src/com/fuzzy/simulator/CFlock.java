@@ -113,7 +113,7 @@ public class CFlock {
             // the fact that the shortest path may be through the edge of the map -- Lalena
 			int animatDistance = animat.GetDistance( otherAnimat );
 			
-			// Similar to Lalena's, gliders of same type attract one another and display flocking
+			// Similar to Lalena's, animats of same type attract one another and display flocking
 			// others repel
 			if( animat.equals( otherAnimat ) && animatDistance > 0 && animatDistance <= DetectionRange )
 			{
