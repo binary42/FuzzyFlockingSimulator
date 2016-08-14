@@ -1,5 +1,6 @@
 package com.fuzzy.controller;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -78,11 +79,20 @@ public class CFuzzyController {
 		}
 	}
 	
-	public void SetVariable( String varIn, double valIn )
+	public void SetVariable( String ruleNameIn, String varIn, double valIn )
 	{
-		for( FIS file : _files )
+		// Hard codd 3-tuple as in CAnimat - alignment, attraction, repulsion
+		if( ruleNameIn == "alignment" )
 		{
-			file.setVariable( varIn,  valIn );
+			_files.elementAt( 0 ).setVariable( varIn, valIn );
+		}
+		if( ruleNameIn == "attraction" )
+		{
+			_files.elementAt( 1 ).setVariable( varIn, valIn );
+		}
+		if( ruleNameIn == "repulsion" )
+		{
+			_files.elementAt( 2 ).setVariable( varIn, valIn );
 		}
 	}
 	
@@ -117,11 +127,20 @@ public class CFuzzyController {
 	
 	public CFuzzyStruct GetNewPositionAndVelocity()
 	{
+		// Algorithm ---------------------------------------------------------
 		// TODO - Compute uncertain actions for each rule
 		
 		// TODO - Compute fuzzy weighted sum - Velocity
 		
 		// TODO - Compute Position
-		return null;
+		
+		// TODO - Populate fuzzy struct
+		// -------------------------------------------------------------------
+
+		
+		
+		CFuzzyStruct structOut = null;
+		
+		return structOut;
 	}
 }

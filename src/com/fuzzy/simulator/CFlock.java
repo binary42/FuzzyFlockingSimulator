@@ -74,10 +74,7 @@ public class CFlock {
 		{
 			CAnimat animat = (CAnimat)_animats.elementAt( movingAnimat );
 			
-			//animat.Move( GeneralHeading( animat ) );
-			
-			// Get fuzzy velocity and heading
-			
+			animat.Move( GeneralHeading( animat ) );
 		}
 		
 		return movedAnimats;
@@ -112,13 +109,47 @@ public class CFlock {
 		{
 			Point otherLocation = ClosetLocation( animat.GetLocation(), otherAnimat.GetLocation() );  
 			
+			// get distance to the other Bird. Note, this distance accounts for
+            // the fact that the shortest path may be through the edge of the map -- Lalena
 			int animatDistance = animat.GetDistance( otherAnimat );
 			
-			// Here's where the fuzzy comes in
-			
-			
+			// Similar to Lalena's, gliders of same type attract one another and display flocking
+			// others repel
+			if( animat.equals( otherAnimat ) && animatDistance > 0 && animatDistance <= DetectionRange )
+			{
+				if( animat.GetColor().equals( otherAnimat ) )
+				{
+					// Flock
+				}
+				else 
+				{
+					// Repel - Lalena
+					Point dist = SumPoints( animat.GetLocation(), 1.0, otherLocation, -1.0 );
+	                dist = normalisePoint( dist, 1000);
+	                double weight = Math.pow( ( 1 - (double)animatDistance / DetectionRange ), 2 );
+	                target = SumPoints( target, 1.0, dist, weight ); // weight is variable
+				}
+				
+				numAnimats++;
+			}
 		}
-		return numAnimats;
+		
+		 // if no birds are close enough to detect, continue moving is same direction. - Lalena
+        if ( numAnimats == 0) {
+            return animat.GetCurrentHeading();
+        }
+        else 
+        { 
+        	// average target points and add to position
+            target = SumPoints( animat.GetLocation(), 1.0, target, 1/(double)numAnimats );
+        }
+        
+        // Get some fuzzy stuff here
+        // Turn the target location into a direction in degrees
+        int targetTheta = (int)( 180 / Math.PI * Math.atan2( animat.GetLocation().y - target.y, target.x - animat.GetLocation().x ) );
+        
+        // Angle is 0-360
+        return (targetTheta + 360) % 360;
 	}
 	// Lalena
 	private Point ClosetLocation( Point point1In, Point point2In ) {

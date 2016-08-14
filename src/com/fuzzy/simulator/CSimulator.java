@@ -225,10 +225,10 @@ public class CSimulator extends Applet implements Runnable {
             
             CFlock.SetMapSize(canvas.getSize());
             
-            Vector<CAnimat> removedCAnimats = flock.Move();
+            Vector<CAnimat> movedCAnimats = flock.Move();
             
-            for ( int i = 0; i < removedCAnimats.size(); ++i ) {
-                CAnimat CAnimat = (CAnimat)removedCAnimats.elementAt(i);
+            for ( int i = 0; i < movedCAnimats.size(); ++i ) {
+                CAnimat CAnimat = (CAnimat)movedCAnimats.elementAt(i);
                 if ( CAnimat.GetColor().equals( Color.red )) {
                     numberOfRedAnimats = redNumberAnimatsScrollbar.getValue() - 1;
                     redNumberAnimatsScrollbar.setValue( numberOfRedAnimats );

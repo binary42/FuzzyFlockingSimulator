@@ -21,8 +21,8 @@ public class TestTipper {
             return;
         }
 
-     // Get default function block
-     		FunctionBlock fb = fis.getFunctionBlock(null);
+        // Get default function block
+ 		FunctionBlock fb = fis.getFunctionBlock(null);
      		
         // Show 
         JFuzzyChart.get().chart(fb);

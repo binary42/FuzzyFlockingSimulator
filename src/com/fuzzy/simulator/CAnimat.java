@@ -13,6 +13,13 @@ import java.util.Vector;
 import com.fuzzy.controller.CFuzzyController;
 import com.fuzzy.controller.CFuzzyStruct;
 
+// Rule class structure
+class CRuleStruct{
+	public static String rule1 = "alignment";
+	public static String rule2 = "attraction";
+	public static String rule3 = "repulsion";
+}
+
 public class CAnimat {
 
 	public static int DetectionRange;
@@ -30,7 +37,7 @@ public class CAnimat {
 	
     // Each Animat gets a fuzzy controller
     private CFuzzyController _animatController;
-
+    
 	public CAnimat( Color colorIn ) {
 		this((int)( Math.random() * s_map.width ), (int)( Math.random() * s_map.height ), (int)( Math.random() * 360 ), colorIn );
 	}
@@ -56,6 +63,7 @@ public class CAnimat {
 	private void InitController()
 	{
 		Vector<String> files = new Vector<String>( 3 );
+		// Hardcode order TODO - change this hack
 		files.add( "../rules/alignment_rules.fcl" );
 		files.add( "../rules/attraction_rules.fcl" );
 		files.add( "../rules/repulsion_rules.fcl" );
@@ -131,6 +139,7 @@ public class CAnimat {
         g.setColor( _color);
         g.drawOval( x-SeparationRange, y-SeparationRange, 2*SeparationRange, 2*SeparationRange );
     }
+	
 	// Lalena
 	public void Move( int newHeadingIn ) {
         // determine if it is better to turn left or right for the new heading
@@ -164,7 +173,22 @@ public class CAnimat {
 	public Point GetLocation() {
 		return location;
 	}
-	// Lalena
+	
+	public int GetCurrentHeading()
+	{
+		return _currentTheta;
+	}
+	
+	public double GetCurrentSpeed()
+	{
+		return _currentSpeed;
+	}
+	public int GetLocationDegrees( CAnimat otherAnimatIn )
+	{
+		
+		return 0;
+	}
+	// Lalena ---------------
 	public int GetDistance( CAnimat otherAnimatIn ) {
         int dX = otherAnimatIn.GetLocation().x - location.x;
         int dY = otherAnimatIn.GetLocation().y - location.y;
@@ -178,10 +202,33 @@ public class CAnimat {
         
         return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
     }
-	 
-	public CFuzzyStruct GetFuzzyVelocityAndHeading()
+	// --------------- 
+	public CFuzzyStruct GetFuzzyVelocityAndHeading( CAnimat otherAnimatIn )
 	{
-		return null;
+		// Algorithm ---------------------------------------------------------
+		// Set variables for each fuzzy attribute
 		
+		// Direction - Distance difference in degrees from neighbor
+		_animatController.SetVariable( CRuleStruct.rule1, "distance", this.GetDistance( otherAnimatIn ) );
+		_animatController.SetVariable( CRuleStruct.rule1, "direction", this.GetCurrentHeading() );
+		_animatController.SetVariable( CRuleStruct.rule1, "speed", this.GetCurrentSpeed() );
+		
+		// Position needs degree -180 to 180 of location of other animat
+		_animatController.SetVariable( CRuleStruct.rule2, "position", this.GetLocationDegrees( otherAnimatIn ) );
+		_animatController.SetVariable( CRuleStruct.rule2, "distance", this.GetDistance( otherAnimatIn ) );
+
+		
+		_animatController.SetVariable( CRuleStruct.rule3, "distance", this.GetDistance( otherAnimatIn ) );
+		_animatController.SetVariable( CRuleStruct.rule3, "direction", this.GetCurrentHeading() );
+
+		
+		// Evaluate for each rules set - alignment/attraction/repulsion
+		_animatController.Evaluate();
+		
+		// Get New position and velocity from controller
+		
+		// Set new velocity and heading
+		
+		return null;
 	}
 }
