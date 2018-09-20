@@ -12,7 +12,7 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 public class TestTipper {
     public static void testTipper(String[] args) throws Exception {
         // Load from 'FCL' file
-        String fileName = "tipper.fcl";
+        String fileName = "rules/tipper.fcl";
         FIS fis = FIS.load(fileName,true);
 
         // Error while loading?
