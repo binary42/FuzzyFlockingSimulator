@@ -17,7 +17,10 @@ public class CFuzzyController {
 	private Vector<FIS> _files;
 	private Vector<FunctionBlock> _blocks;
 	
-	private Vector<CFuzzyStruct> _fuzzyOutputs;
+	private Vector<CFuzzyStruct> _fuzzyOutputs = new Vector<CFuzzyStruct>();
+	
+	// Weights for rules sets
+	private Vector<Double> _weights;
 	
 	public CFuzzyController( int numFCLIn )
 	{
@@ -26,6 +29,8 @@ public class CFuzzyController {
 		
 		_files = new Vector<FIS>( _numberFCL );
 		_blocks = new Vector<FunctionBlock>(0);
+
+		_weights = new Vector<Double>( _numberFCL );
 	}
 	
 	public void SetNumberFCL( int numFCLIn )
@@ -38,6 +43,28 @@ public class CFuzzyController {
 	{
 		return _numberFCL;
 	}
+	
+	public void SetWeights( double wp, double wa, double wr )
+	{
+		_weights.add( new Double(wp) );// alignment
+		_weights.add( new Double(wa) );// attraction
+		_weights.add( new Double(wr) );// repulsion
+		
+		int index = 0;
+		for( CFuzzyStruct fuzzy : _fuzzyOutputs)
+		{
+			fuzzy.SetFlightDirectionWeight(_weights.get(index));
+			index++;
+		}
+		
+		index = 0;
+		for( CFuzzyStruct fuzzy : _fuzzyOutputs)
+		{
+			fuzzy.SetFlightSpeedWeight(_weights.get(index));
+			index++;
+		}
+	}
+	
 	/**
 	 * Order really matters in this impl!
 	 * @param fileNamesIn
@@ -98,6 +125,8 @@ public class CFuzzyController {
 	
 	public void Evaluate()
 	{
+		_fuzzyOutputs.clear();
+		
 		for( FIS file : _files )
 		{
 			file.evaluate();
@@ -107,40 +136,51 @@ public class CFuzzyController {
 	}
 	
 	/**
-	 * Not sure about this one. May be best to return full vector of values.
+	 * Return full vector of values.
 	 * Unit testing only. GetNewPositionAndVelocity returns new fuzzy struct decision.
 	 * @param varIn
-	 * @param displayChart
+	 * @param 
 	 * @return
 	 */
-	public Variable GetVariableResult( String varIn, boolean displayChart )
+	public Vector<CFuzzyStruct> GetVariableResult( String varIn )
 	{
-		for( FunctionBlock block : _blocks )
-		{
-			
-		}
-		// Must reset the _fuzzyOutput vector for now
-		_fuzzyOutputs.clear();
-		
-		return null;
+		return _fuzzyOutputs;
 	}
 	
-	public CFuzzyStruct GetNewPositionAndVelocity()
+	public int GetWeightedAvgSumDirections()
 	{
-		// Algorithm ---------------------------------------------------------
-		// TODO - Compute uncertain actions for each rule
+		int sum = 0;
 		
-		// TODO - Compute fuzzy weighted sum - Velocity
+		for( CFuzzyStruct fuzzy : _fuzzyOutputs )
+		{
+			double val = fuzzy.GetFlightDirection().getValue();
+			
+			if( val >= 0.0 )
+			{
+				sum += ( val * fuzzy.GetFlightDirectionWeight() ) ;
+			}
+		}
 		
-		// TODO - Compute Position
+		sum /= _numberFCL;
 		
-		// TODO - Populate fuzzy struct
-		// -------------------------------------------------------------------
-
+		return sum;
+	}
+	
+	public double GetWeightedAvgSumSpeed()
+	{
+		double sum = 0;
 		
+		for( CFuzzyStruct fuzzy : _fuzzyOutputs )
+		{
+			double val = fuzzy.GetFlightSpeed().getValue();
+			if( val >= 0.0 )
+			{
+				sum += ( val * fuzzy.GetFlightSpeedWeight() ) ;
+			}
+		}
 		
-		CFuzzyStruct structOut = null;
+		sum /= _numberFCL;
 		
-		return structOut;
+		return sum;
 	}
 }

@@ -5,16 +5,18 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 public class CFuzzyStruct {
 	private Variable _flightSpeed;
 	private Variable _flightDirection;
+	private double	 _flightSpeedWeight;
+	private double 	 _flightDirectionWeight;
 	
-	CFuzzyStruct( Variable velocityIn, Variable directionIn )
+	CFuzzyStruct( Variable speedIn, Variable directionIn )
 	{
-		_flightSpeed = velocityIn;
+		_flightSpeed = speedIn;
 		_flightDirection = directionIn;
 	}
 	
-	public void SetVelocity( Variable velocityIn )
+	public void SetFlightSpeed( Variable speedIn )
 	{
-		_flightSpeed = velocityIn;
+		_flightSpeed = speedIn;
 	}
 	
 	public Variable GetFlightSpeed()
@@ -22,7 +24,7 @@ public class CFuzzyStruct {
 		return _flightSpeed;
 	}
 	
-	public void SetDirection( Variable directionIn )
+	public void SetFlightDirection( Variable directionIn )
 	{
 		_flightDirection = directionIn;
 	}
@@ -30,5 +32,25 @@ public class CFuzzyStruct {
 	public Variable GetFlightDirection()
 	{
 		return _flightDirection;
+	}
+	
+	public void SetFlightSpeedWeight( double weightIn )
+	{
+		_flightSpeedWeight = weightIn;
+	}
+	
+	public double GetFlightSpeedWeight()
+	{
+		return _flightSpeedWeight;
+	}
+	
+	public void SetFlightDirectionWeight( double weightIn )
+	{
+		_flightDirectionWeight = weightIn;
+	}
+	
+	public double GetFlightDirectionWeight()
+	{
+		return _flightDirectionWeight;
 	}
 }

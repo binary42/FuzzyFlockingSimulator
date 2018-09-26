@@ -12,6 +12,7 @@ import java.awt.*;
 import java.applet.*;
 import java.util.Vector;
 
+
 //Lalena
 public class CSimulator extends Applet implements Runnable {
 	
@@ -36,7 +37,7 @@ public class CSimulator extends Applet implements Runnable {
     final int MAXIMUM_ANIMATS = 50;
     final int MAXIMUM_SPEED = 30;
 
-    final int MAXIMUM_DISTANCE = 200;
+    final int MAXIMUM_DISTANCE = 100;
     
     // These are the default values for the sliders, also used for a reset
     int DEFAULT_NUMBER_GREEN = 10;
@@ -115,7 +116,9 @@ public class CSimulator extends Applet implements Runnable {
      * This creates the canvas, the sliders, and the CFlock of CAnimats.
      */
     public void init() {
-        this.resize( CFlock.DIM, CFlock.DIM );
+        flock = new CFlock();
+        
+    	this.resize( CFlock.DIM, CFlock.DIM );
         canvas = new SimulatorCanvas();
         canvas.simulator = this;
         
@@ -183,7 +186,7 @@ public class CSimulator extends Applet implements Runnable {
         	flock.AddAnimat( animat );
         }
         for( int i=0; i < numberOfRedAnimats; ++i ) {
-            CAnimat CAnimat = new CAnimat();
+            CAnimat CAnimat = new CAnimat( Color.red);
             CAnimat.SetSpeed( redAnimatSpeed );
             
             CAnimat.SetMaxTurnTheta( redAnimatMaxTheta );
@@ -225,23 +228,23 @@ public class CSimulator extends Applet implements Runnable {
             
             CFlock.SetMapSize(canvas.getSize());
             
-            Vector<CAnimat> movedCAnimats = flock.Move();
+            Vector<CAnimat> removedCAnimats = flock.Move();
             
-            for ( int i = 0; i < movedCAnimats.size(); ++i ) {
-                CAnimat CAnimat = (CAnimat)movedCAnimats.elementAt(i);
-                if ( CAnimat.GetColor().equals( Color.red )) {
-                    numberOfRedAnimats = redNumberAnimatsScrollbar.getValue() - 1;
-                    redNumberAnimatsScrollbar.setValue( numberOfRedAnimats );
-                }
-                else if ( CAnimat.GetColor().equals( Color.blue )) {
-                    numberOfBlueAnimats = blueNumberAnimatsScrollbar.getValue() - 1;
-                    blueNumberAnimatsScrollbar.setValue( numberOfBlueAnimats );
-                }
-                else if ( CAnimat.GetColor().equals( Color.green )) {
-                    numberOfGreenAnimats = greenNumberAnimatsScrollbar.getValue() - 1;
-                    greenNumberAnimatsScrollbar.setValue( numberOfGreenAnimats );
-                }
-            }
+//            for( CAnimat animat : removedCAnimats )
+//            {
+//            	if ( animat.GetColor().equals( Color.red )) {
+//                    numberOfRedAnimats = redNumberAnimatsScrollbar.getValue() - 1;
+//                    redNumberAnimatsScrollbar.setValue( numberOfRedAnimats );
+//                }
+//                else if ( animat.GetColor().equals( Color.blue )) {
+//                    numberOfBlueAnimats = blueNumberAnimatsScrollbar.getValue() - 1;
+//                    blueNumberAnimatsScrollbar.setValue( numberOfBlueAnimats );
+//                }
+//                else if ( animat.GetColor().equals( Color.green )) {
+//                    numberOfGreenAnimats = greenNumberAnimatsScrollbar.getValue() - 1;
+//                    greenNumberAnimatsScrollbar.setValue( numberOfGreenAnimats );
+//                }
+//            }
             
             canvas.validate();
             canvas.setVisible( true );
@@ -309,7 +312,7 @@ public class CSimulator extends Applet implements Runnable {
             }
             else {
                 for ( int i = 0; i < redNumberAnimatsScrollbar.getValue() - numberOfRedAnimats; ++i ) {
-                    CAnimat animat = new CAnimat();
+                    CAnimat animat = new CAnimat( Color.red );
                     animat.SetSpeed( redAnimatSpeed );
                     
                     animat.SetMaxTurnTheta( redAnimatMaxTheta );
@@ -434,7 +437,7 @@ public class CSimulator extends Applet implements Runnable {
         controls.add( separateScrollbar );
 
     }
-
+    
     /**
      * Sets the values of the slider controls on the panel.
      */
@@ -474,7 +477,7 @@ public class CSimulator extends Applet implements Runnable {
         Graphics canvasGraphics;
     
         // Reference back to the main applet, so we can get to the CFlock.
-        CSimulator simulator;
+        CSimulator simulator = new CSimulator();
         
         /**
          * This is the java applet update function.
@@ -506,7 +509,7 @@ public class CSimulator extends Applet implements Runnable {
                 canvasGraphics.setColor( Color.white );
                 
                 canvasGraphics.fillRect( 0, 0, canvas.getWidth(), canvas.getHeight() );
-                simulator.flock.Draw( canvasGraphics );
+                simulator.flock.draw( canvasGraphics );
                 
                 canvas.getGraphics().drawImage(canvasImage, 0, 0, this);
             }

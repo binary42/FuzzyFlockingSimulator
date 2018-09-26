@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Vector;
 
+
 import com.fuzzy.controller.CFuzzyController;
 
 public class CFlock {
@@ -16,7 +17,7 @@ public class CFlock {
 	public static int SeparationRange;
 	public static int DetectionRange;
 	
-	public static final int DIM = 1000;
+	public static final int DIM = 600;
 	
 	private Vector<CAnimat> _animats;
 
@@ -58,30 +59,36 @@ public class CFlock {
 		}
 	}
 
-	public void Draw( Graphics canvasGraphicsIn ) {
+	public void draw( Graphics canvasGraphicsIn ) {
 		for( CAnimat animat : _animats)
 		{
-			animat.Draw( canvasGraphicsIn );
+			animat.draw( canvasGraphicsIn );
 		}
 	}
 	// departure from Lalena - fuzzy bits
 	synchronized public Vector<CAnimat> Move()
 	{
 		int movingAnimat = 0;
-		Vector<CAnimat> movedAnimats = new Vector<CAnimat>( 2, 1 );
+		Vector<CAnimat> removedAnimats = new Vector<CAnimat>( 2, 1 );
 		
 		while( movingAnimat < _animats.size() )
 		{
 			CAnimat animat = (CAnimat)_animats.elementAt( movingAnimat );
-			
+
 			animat.Move( GeneralHeading( animat ) );
+			
+			movingAnimat++;
 		}
 		
-		return movedAnimats;
+		return removedAnimats;
 	}
 	
 	public Point SumPoints( Point p1, double w1, Point p2, double w2 ) {
         return new Point( (int)( w1*p1.x + w2*p2.x ), (int)( w1*p1.y + w2*p2.y ) );
+    }
+	
+	public int SumHeading( int p1, double w1, int p2, double w2 ) {
+        return ( (int)( w1*p1 + w2*p2 ));
     }
 	
 	public double SizeOfPoint( Point p ) {
@@ -103,10 +110,14 @@ public class CFlock {
 	{
 		Point target = new Point( 0, 0 );
 		
+		int testHeading = animat.GetCurrentHeading();
+		int heading = animat.GetCurrentHeading();
+		int targetrepheading = animat.GetCurrentHeading();
 		int numAnimats = 0;
 		
 		for( CAnimat otherAnimat : _animats )
-		{
+		{// TODO -- THIS IS ALL WRONG FOR THE FUZZY WORK....
+			
 			Point otherLocation = ClosetLocation( animat.GetLocation(), otherAnimat.GetLocation() );  
 			
 			// get distance to the other Bird. Note, this distance accounts for
@@ -114,42 +125,35 @@ public class CFlock {
 			int animatDistance = animat.GetDistance( otherAnimat );
 			
 			// Similar to Lalena's, animats of same type attract one another and display flocking
-			// others repel
-			if( animat.equals( otherAnimat ) && animatDistance > 0 && animatDistance <= DetectionRange )
+			// others repel ... animat.Equals( otherAnimat ) && 
+			
+			if( animatDistance > 0 && animatDistance <= DetectionRange )
 			{
-				if( animat.GetColor().equals( otherAnimat ) )
+				if( animat.Equals( otherAnimat ) )
 				{
 					// Flock
+					testHeading = animat.GetFuzzyVelocityAndHeading( otherAnimat );
+					
+					testHeading = (testHeading + 360 ) % 360;
+					
+					heading = SumHeading( animat.GetCurrentHeading(), 1.0, testHeading, 1.0);
+					
 				}
-				else 
-				{
-					// Repel - Lalena
-					Point dist = SumPoints( animat.GetLocation(), 1.0, otherLocation, -1.0 );
-	                dist = normalisePoint( dist, 1000);
-	                double weight = Math.pow( ( 1 - (double)animatDistance / DetectionRange ), 2 );
-	                target = SumPoints( target, 1.0, dist, weight ); // weight is variable
-				}
+					
+//				numAnimats++;
+			}else
+			{
+				return animat.GetCurrentHeading();
 				
-				numAnimats++;
 			}
 		}
 		
 		 // if no birds are close enough to detect, continue moving is same direction. - Lalena
-        if ( numAnimats == 0) {
-            return animat.GetCurrentHeading();
-        }
-        else 
-        { 
-        	// average target points and add to position
-            target = SumPoints( animat.GetLocation(), 1.0, target, 1/(double)numAnimats );
-        }
-        
-        // Get some fuzzy stuff here
-        // Turn the target location into a direction in degrees
-        int targetTheta = (int)( 180 / Math.PI * Math.atan2( animat.GetLocation().y - target.y, target.x - animat.GetLocation().x ) );
-        
-        // Angle is 0-360
-        return (targetTheta + 360) % 360;
+//        if ( numAnimats == 0) {
+//            return animat.GetCurrentHeading();
+//        }
+
+        return heading;
 	}
 	// Lalena
 	private Point ClosetLocation( Point point1In, Point point2In ) {

@@ -24,7 +24,7 @@ public class CAnimat {
 
 	public static int DetectionRange;
 	public static int SeparationRange;
-	public static boolean showRanges;
+	public static boolean showRanges = false;
 	
 	protected Point location = new Point( 0, 0 );
 	private int _currentTheta;
@@ -49,12 +49,6 @@ public class CAnimat {
 		_currentTheta = thetaIn;
 		_color = colorIn;
 		
-		// Hard code # of rule sets for now...
-		_animatController = new CFuzzyController( 3 );
-		InitController();
-	}
-
-	public CAnimat() {
 		// Hard code # of rule sets for now...
 		_animatController = new CFuzzyController( 3 );
 		InitController();
@@ -88,51 +82,53 @@ public class CAnimat {
 		return _color;
 	}
 	
-	public void Draw( Graphics g) {
+	public void draw( Graphics g) {
         g.setColor( this._color);
         g.fillArc( location.x - 12, location.y - 12, 24, 24, _currentTheta + 180 - 20, 40 );
         
         if( showRanges) {
-            DrawRanges( g );
+            drawRanges( g );
         }
+      
     }
 	// Lalena
-	public void DrawRanges( Graphics g ) {
-        DrawCircles(g, location.x, location.y );
+	public void drawRanges( Graphics g ) {
+        drawCircles(g, location.x, location.y );
         
         boolean top = ( location.y < DetectionRange );
         boolean bottom = ( location.y > s_map.height - DetectionRange );
        
         
         if (location.x < DetectionRange) { // if left
-            DrawCircles(g, s_map.width + location.x, location.y );
+            drawCircles(g, s_map.width + location.x, location.y );
             
             if (top) {
-                DrawCircles(g, s_map.width + location.x, s_map.height + location.y );
+                drawCircles(g, s_map.width + location.x, s_map.height + location.y );
             }
             else if ( bottom ) {
-                DrawCircles(g, s_map.width + location.x, location.y - s_map.height );
+                drawCircles(g, s_map.width + location.x, location.y - s_map.height );
             }
         } else if ( location.x > s_map.width - DetectionRange ) { // if right
-            DrawCircles(g, location.x - s_map.width, location.y );
+            drawCircles(g, location.x - s_map.width, location.y );
             
             if ( top ) {
-                DrawCircles(g, location.x - s_map.width, s_map.height + location.y );
+                drawCircles(g, location.x - s_map.width, s_map.height + location.y );
             }
             else if ( bottom ) {
-                DrawCircles(g, location.x - s_map.width, location.y - s_map.height );
+                drawCircles(g, location.x - s_map.width, location.y - s_map.height );
             }
         }
         
         if ( top ) {
-            DrawCircles( g, location.x, s_map.height + location.y );
+            drawCircles( g, location.x, s_map.height + location.y );
         }
         else if ( bottom ) {
-            DrawCircles( g, location.x, location.y - s_map.height );
+            drawCircles( g, location.x, location.y - s_map.height );
         }
+        
     }
 	
-	protected void DrawCircles( Graphics g, int x, int y ) {
+	protected void drawCircles( Graphics g, int x, int y ) {
         g.setColor( new Color((int)_color.getRed()/2, (int)_color.getGreen()/2, (int)_color.getBlue()/2 ) );
         g.drawOval( x-DetectionRange, y-DetectionRange, 2*DetectionRange, 2*DetectionRange );
         
@@ -168,6 +164,8 @@ public class CAnimat {
         
         location.y -= (int)( _currentSpeed * Math.sin( _currentTheta * Math.PI/180) ) - s_map.height;
         location.y %= s_map.height;
+        
+        
     }
 
 	public Point GetLocation() {
@@ -185,8 +183,12 @@ public class CAnimat {
 	}
 	public int GetLocationDegrees( CAnimat otherAnimatIn )
 	{
-		
-		return 0;
+		int dx = otherAnimatIn.GetLocation().x - location.x;
+		int dy = otherAnimatIn.GetLocation().y - location.y;
+		// atan2 returns radians
+		int out = (int)((Math.atan2( dy, dx ) * 180)/Math.PI);
+
+		return out;
 	}
 	// Lalena ---------------
 	public int GetDistance( CAnimat otherAnimatIn ) {
@@ -203,32 +205,52 @@ public class CAnimat {
         return (int)Math.sqrt( Math.pow( dX, 2 ) + Math.pow( dY, 2 ));
     }
 	// --------------- 
-	public CFuzzyStruct GetFuzzyVelocityAndHeading( CAnimat otherAnimatIn )
+	public int GetFuzzyVelocityAndHeading( CAnimat otherAnimatIn )
 	{
+		Point newPointOut = new Point( 0, 0 );
+		
 		// Algorithm ---------------------------------------------------------
 		// Set variables for each fuzzy attribute
+		int distance = this.GetDistance( otherAnimatIn );
 		
 		// Direction - Distance difference in degrees from neighbor
-		_animatController.SetVariable( CRuleStruct.rule1, "distance", this.GetDistance( otherAnimatIn ) );
-		_animatController.SetVariable( CRuleStruct.rule1, "direction", this.GetCurrentHeading() );
-		_animatController.SetVariable( CRuleStruct.rule1, "speed", this.GetCurrentSpeed() );
+		_animatController.SetVariable( CRuleStruct.rule1, "distance", distance );
+		int direction = ( ( otherAnimatIn.GetCurrentHeading() + 180 ) % 360 ) - 180;
+		
+		_animatController.SetVariable( CRuleStruct.rule1, "direction", direction );
+		_animatController.SetVariable( CRuleStruct.rule1, "speed", otherAnimatIn.GetCurrentSpeed() );
 		
 		// Position needs degree -180 to 180 of location of other animat
-		_animatController.SetVariable( CRuleStruct.rule2, "position", this.GetLocationDegrees( otherAnimatIn ) );
-		_animatController.SetVariable( CRuleStruct.rule2, "distance", this.GetDistance( otherAnimatIn ) );
+		int position = ( ( this.GetLocationDegrees( otherAnimatIn ) + 180 ) % 360 ) - 180;
+		
+		_animatController.SetVariable( CRuleStruct.rule2, "distance", distance );
+		_animatController.SetVariable( CRuleStruct.rule2, "position", position );
+		
+		_animatController.SetVariable( CRuleStruct.rule3, "distance", distance );
+		_animatController.SetVariable( CRuleStruct.rule3, "position", position );
 
 		
-		_animatController.SetVariable( CRuleStruct.rule3, "distance", this.GetDistance( otherAnimatIn ) );
-		_animatController.SetVariable( CRuleStruct.rule3, "direction", this.GetCurrentHeading() );
-
 		
 		// Evaluate for each rules set - alignment/attraction/repulsion
 		_animatController.Evaluate();
 		
+		// Set weights for controller - for output
+		_animatController.SetWeights(.5, .5, .5);// alignment, attraction, repulsion
+		
+		// Let's do an average sum of weighted speeds
+//		_currentSpeed = _animatController.GetWeightedAvgSumSpeed();
+		
+		// Let's do an average sum of weighted directions
+		int sumDirOut = _animatController.GetWeightedAvgSumDirections();
+
 		// Get New position and velocity from controller
 		
-		// Set new velocity and heading
 		
-		return null;
+		return sumDirOut;
+	}
+	
+	public boolean Equals( CAnimat animatIn )
+	{
+		return ( this._color == animatIn._color );
 	}
 }

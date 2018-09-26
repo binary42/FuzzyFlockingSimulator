@@ -1,27 +1,27 @@
 FUNCTION_BLOCK attraction
 
 VAR_INPUT
-	att_distance	: 			REAL;
-	att_position	:			REAL;
+	distance	: 			REAL;
+	position	:			REAL;
 END_VAR
 
 VAR_OUTPUT
-	att_flight_direction	:	REAL;
-	att_flight_speed		:	REAL;
+	flight_direction	:	REAL;
+	flight_speed		:	REAL;
 END_VAR
 
-FUZZIFY att_distance	// Percent of visual range
+FUZZIFY distance	// Percent of visual range
 	TERM too_far			:=		( 0, 0 ) ( 40 , 0 ) ( 100 , 1 );		
 	TERM close_enough		:=		( 0, 1) ( 40, 1 ) ( 100 ,0 );		
 END_FUZZIFY
 
-FUZZIFY att_position	// Perceived neighbor's angular offset in degrees
+FUZZIFY position	// Perceived neighbor's angular offset in degrees
 	TERM in_front				:=		( -180, 1 ) ( 0, 0 ) ( 180, 0 );
 	TERM left_or_behind 		:=		trian -180 0 180;
 	TERM right_or_behind 		:= 		( -180, 0 ) ( 0, 0 ) ( 180, 1 );
 END_FUZZIFY
 
-DEFUZZIFY att_flight_direction	// Needed change of direction in degrees
+DEFUZZIFY flight_direction	// Needed change of direction in degrees
 	TERM turn_left			:=		trian -360 -180 0;
 	TERM keep_direction		:=		trian -180 0 180;
 	TERM turn_right			:=		trian 0 180 360;
@@ -30,7 +30,7 @@ DEFUZZIFY att_flight_direction	// Needed change of direction in degrees
 	DEFAULT	:= 0;
 END_DEFUZZIFY
 
-DEFUZZIFY att_flight_speed		//Needed change of speed in % max speed
+DEFUZZIFY flight_speed		//Needed change of speed in % max speed
 	TERM decelerate			:= trian -200 -100 0;
 	TERM keep_speed			:= trian -100 0 100;
 	TERM accelerate			:= trian 0 100 200;
@@ -44,15 +44,15 @@ RULEBLOCK attraction_rules
  	ACT	: MIN;			// Use min activation method
 	ACCU : MAX;			// Use max accumulation method
 	
-	RULE 1 : IF att_distance IS close_enough THEN att_flight_direction IS keep_direction;
-	RULE 2 : IF att_distance IS too_far THEN att_flight_direction IS keep_direction;
-	RULE 3 : IF att_distance IS close_enough THEN att_flight_speed IS keep_speed;
-	RULE 4 : IF att_distance IS too_far THEN att_flight_speed IS keep_speed;
-	RULE 5 : IF att_distance IS too_far AND att_position IS in_front THEN att_flight_speed IS accelerate;
-	RULE 6 : IF att_distance IS too_far AND att_position IS left_or_behind THEN att_flight_direction IS turn_right;
-	RULE 7 : IF att_distance IS too_far AND att_position IS left_or_behind THEN att_flight_speed IS decelerate;
-	RULE 8 : IF att_distance IS too_far AND att_position IS right_or_behind THEN att_flight_direction IS turn_left;
-	RULE 9 : IF att_distance IS too_far AND att_position IS right_or_behind THEN att_flight_speed IS decelerate;
+	RULE 1 : IF distance IS close_enough THEN flight_direction IS keep_direction;
+	RULE 2 : IF distance IS too_far THEN flight_direction IS keep_direction;
+	RULE 3 : IF distance IS close_enough THEN flight_speed IS keep_speed;
+	RULE 4 : IF distance IS too_far THEN flight_speed IS keep_speed;
+	RULE 5 : IF distance IS too_far AND position IS in_front THEN flight_speed IS accelerate;
+	RULE 6 : IF distance IS too_far AND position IS left_or_behind THEN flight_direction IS turn_left;
+	RULE 7 : IF distance IS too_far AND position IS left_or_behind THEN flight_speed IS decelerate;
+	RULE 8 : IF distance IS too_far AND position IS right_or_behind THEN flight_direction IS turn_right;
+	RULE 9 : IF distance IS too_far AND position IS right_or_behind THEN flight_speed IS decelerate;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

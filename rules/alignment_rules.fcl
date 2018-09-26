@@ -1,35 +1,35 @@
 FUNCTION_BLOCK alignment
 
 VAR_INPUT
-	ali_distance 	: 	REAL;
-	ali_direction	:	REAL;
-	ali_speed		:	REAL;
+	distance 	: 	REAL;
+	direction	:	REAL;
+	speed		:	REAL;
 END_VAR
 
 VAR_OUTPUT
-	ali_flight_direction	:	REAL;
-	ali_flight_speed		:	REAL;
+	flight_direction	:	REAL;
+	flight_speed		:	REAL;
 END_VAR
 
-FUZZIFY ali_distance		// Percent distance % visual range
+FUZZIFY distance		// Percent distance % visual range
 	TERM too_close	:=	( 0, 1 ) ( 80, 0 );
 	TERM good		:=	trian 0 60 120;
 	TERM too_far	:=	( 0, 0 ) ( 40, 0 )( 100, 1 );
 END_FUZZIFY
 
-FUZZIFY ali_direction		// Distance difference in degrees from neighbor
+FUZZIFY direction		// Distance difference in degrees from neighbor
 	TERM left				:=	( -180, 1 ) ( 0, 0 ); 
 	TERM same_direction		:=	trian -180 0 180;
 	TERM right				:=	( -180, 0 ) ( 0, 0 ) ( 180, 1);
 END_FUZZIFY
 
-FUZZIFY ali_speed			// difference in speed % max
+FUZZIFY speed			// difference in speed % max
 	TERM slower				:=	( -100, 1 ) ( 0, 0 ) ( 100, 0 );
 	TERM same_speed			:=	trian -100 0 100;
 	TERM faster				:=	( -100, 0 ) ( 0, 0 ) ( 100, 1 );
 END_FUZZIFY
 
-DEFUZZIFY ali_flight_direction		// Change of direction in degree
+DEFUZZIFY flight_direction		// Change of direction in degree
 	TERM turn_left			:=	trian -360 -180 0; 
 	TERM keep_direction		:=	trian -180 0 180;
 	TERM turn_right			:=	trian 0 180 360;
@@ -38,7 +38,7 @@ DEFUZZIFY ali_flight_direction		// Change of direction in degree
 	DEFAULT	:= 0;
 END_DEFUZZIFY
 
-DEFUZZIFY ali_flight_speed			// Change of speed % max
+DEFUZZIFY flight_speed			// Change of speed % max
 	TERM decelerate			:=	trian -200 -100 0;
 	TERM keep_speed			:=	trian -100 0 100;
 	TERM accelerate			:=	trian 0 100 200;
@@ -53,16 +53,16 @@ RULEBLOCK alignment_rules
  	ACT	: MIN;			// Use min activation method
 	ACCU : MAX;			// Use max accumulation method
 	
-	RULE 1 : IF ali_distance IS too_far THEN ali_flight_direction IS keep_direction;
-	RULE 2 : IF ali_distance IS too_close THEN ali_flight_direction IS keep_direction;
-	RULE 3 : IF ali_distance IS too_far THEN ali_flight_speed IS keep_speed;
-	RULE 4 : IF ali_distance IS too_close THEN ali_flight_speed IS keep_speed;
-	RULE 5 : IF ali_distance IS good AND ali_direction IS same_direction THEN ali_flight_direction IS keep_direction;
-	RULE 6 : IF ali_distance IS good AND ali_direction IS left THEN ali_flight_direction IS turn_left;
-	RULE 7 : IF ali_distance IS good AND ali_direction IS right THEN ali_flight_direction IS turn_right;
-	RULE 8 : IF ali_distance IS good AND ali_speed IS same_speed THEN ali_flight_speed IS keep_speed;
-	RULE 9 : IF ali_distance IS good AND ali_speed IS slower THEN ali_flight_speed IS decelerate;
-	RULE 10 : IF ali_distance IS good AND ali_speed IS faster THEN ali_flight_speed IS accelerate;
+	RULE 1 : IF distance IS too_far THEN flight_direction IS keep_direction;
+	RULE 2 : IF distance IS too_close THEN flight_direction IS keep_direction;
+	RULE 3 : IF distance IS too_far THEN flight_speed IS keep_speed;
+	RULE 4 : IF distance IS too_close THEN flight_speed IS keep_speed;
+	RULE 5 : IF distance IS good AND direction IS same_direction THEN flight_direction IS keep_direction;
+	RULE 6 : IF distance IS good AND direction IS left THEN flight_direction IS turn_left;
+	RULE 7 : IF distance IS good AND direction IS right THEN flight_direction IS turn_right;
+	RULE 8 : IF distance IS good AND speed IS same_speed THEN flight_speed IS keep_speed;
+	RULE 9 : IF distance IS good AND speed IS slower THEN flight_speed IS decelerate;
+	RULE 10 : IF distance IS good AND speed IS faster THEN flight_speed IS accelerate;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

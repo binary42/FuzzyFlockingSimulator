@@ -35,16 +35,16 @@ public class CFlockGraphRules {
 		JFuzzyChart.get().chart( alignmentBlock );
 		JFuzzyChart.get().chart( repulsionBlock );
 		
-		// Test parameters
-		attractionBlock.setVariable( "att_distance", 25 );
-		attractionBlock.setVariable( "att_position", 150 );
+		// Test parameters -- remove att ali and rep for cfuzzy controller
+		attractionBlock.setVariable( "distance", 25 );
+		attractionBlock.setVariable( "position", 150 );
 		
-		alignmentBlock.setVariable( "ali_distance", 25 );
-		alignmentBlock.setVariable( "ali_direction", 45 );
-		alignmentBlock.setVariable( "ali_speed", 55 );
+		alignmentBlock.setVariable( "distance", 25 );
+		alignmentBlock.setVariable( "direction", 45 );
+		alignmentBlock.setVariable( "speed", 55 );
 		
-		repulsionBlock.setVariable( "rep_distance", 25 );
-		repulsionBlock.setVariable( "rep_position", 45 );
+		repulsionBlock.setVariable( "distance", 25 );
+		repulsionBlock.setVariable( "position", 45 );
 		
 		// Evaluate
 		attractionBlock.evaluate();
@@ -52,14 +52,14 @@ public class CFlockGraphRules {
 		repulsionBlock.evaluate();
 		
 		// Display output charts
-		Variable attractionFlightDirection = attractionBlock.getVariable( "att_flight_direction" );
-		Variable attractionFlightSpeed = attractionBlock.getVariable( "att_flight_speed" );
+		Variable attractionFlightDirection = attractionBlock.getVariable( "flight_direction" );
+		Variable attractionFlightSpeed = attractionBlock.getVariable( "flight_speed" );
 		
-		Variable alignmentFlightDirection = alignmentBlock.getVariable( "ali_flight_direction" );
-		Variable alignmentFlightSpeed = alignmentBlock.getVariable( "ali_flight_speed" );
+		Variable alignmentFlightDirection = alignmentBlock.getVariable( "flight_direction" );
+		Variable alignmentFlightSpeed = alignmentBlock.getVariable( "flight_speed" );
 		
-		Variable repulsionFlightDirection = repulsionBlock.getVariable( "rep_flight_direction" );
-		Variable repulsionFlightSpeed = repulsionBlock.getVariable( "rep_flight_speed " );
+		Variable repulsionFlightDirection = repulsionBlock.getVariable( "flight_direction" );
+		Variable repulsionFlightSpeed = repulsionBlock.getVariable( "flight_speed " );
 		
 		JFuzzyChart.get().chart( attractionFlightDirection, attractionFlightDirection.getDefuzzifier(), true );
 		JFuzzyChart.get().chart( attractionFlightSpeed, attractionFlightSpeed.getDefuzzifier(), true );
